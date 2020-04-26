@@ -1,0 +1,1 @@
+git clone git://github.com/tpaviot/oce.git C:\thirdparty\vs2015\x64\oce

@@ -1,0 +1,40 @@
+Install libxml2 and libxslt
+
+Open PowerShell:
+	git clone https://github.com/Microsoft/vcpkg
+	cd vcpkg
+	.\bootstrap-vcpkg.bat
+	.\vcpkg install libxml2:x64-windows
+	.\vcpkg install libxslt:x64-windows
+
+Download raptor: http://librdf.org/raptor/ (http://download.librdf.org/source/raptor2-2.0.15.tar.gz)
+
+Change raptor2-2.015/CMakeLists.txt, line 258:
+
+ADD_DEFINITIONS(-DHAVE_CONFIG_H)
+->
+ADD_DEFINITIONS(-DHAVE_CONFIG_H -DYY_NO_UNISTD_H)
+
+change raptor2-2.015/src/CMakeLists.txt, line 118:
+ADD_LIBRARY(raptor2
+	raptor_avltree.c
+	...
+->
+ADD_LIBRARY(raptor2
+	raptor_escaped.c
+	sort_r.c
+	raptor_ntriples.c
+	raptor_avltree.c
+	...
+	
+open cmake:
+	set LIBXML2_INCLUDE_DIR to: path/to/vcpkg/installed/x64-windows/include
+	set LIBXML2_LIBRARIES to: path/to/vcpkg/installed/x64-windows/lib/libxml2.lib
+	
+	set LIBXSLT_INCLUDE_DIR to: path/to/vcpkg/installed/x64-windows/include
+	set LIBXSLT_LIBRARIES to: path/to/vcpkg/installed/x64-windows/lib/libxlst.lib
+	set LIBXSLT_EXSLT_LIBRARY to: path/to/vcpkg/installed/x64-windows/lib/libexlst.lib
+	
+	
+Deployment:
+ CMAKE_INSTALL_PREFIX Auf C:\thirdparty\vs2017\x64\raptor2 setzen -> INSTALL in Visual Studio ausführen
